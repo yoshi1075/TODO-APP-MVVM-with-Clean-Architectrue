@@ -28,16 +28,18 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwit
 
 @ExperimentalMaterial3Api
 @Composable
-fun TodoListScreen() {
+fun TodoListScreen(
+    navigateToTodoRegisterScreen: () -> Unit,
+) {
     Scaffold(
         topBar = { TodoListAppBar() },
-        floatingActionButton = { AddingTodoFloatingButton() },
+        floatingActionButton = { AddingTodoFloatingButton(navigateToTodoRegisterScreen) },
     ) {
         LazyColumn(
             modifier = Modifier.padding(it)
         ) {
             items(50) { index ->
-                val todo = Todo(title =  "title$index")
+                val todo = Todo(title = "title$index")
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -65,8 +67,9 @@ fun TodoListAppBar() {
 }
 
 @Composable
-fun AddingTodoFloatingButton() {
-    FloatingActionButton(onClick = {}) {
+fun AddingTodoFloatingButton(navigateToTodoRegisterScreen: () -> Unit) {
+    FloatingActionButton(
+        onClick = { navigateToTodoRegisterScreen() }) {
         Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
     }
 }
@@ -76,6 +79,6 @@ fun AddingTodoFloatingButton() {
 @Composable
 fun TodoListScreenPreview() {
     TODOAPPMVVMwithCleanArchitectrueTheme {
-        TodoListScreen()
+        TodoListScreen {}
     }
 }

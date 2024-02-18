@@ -31,12 +31,12 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterScreen() {
+fun TodoRegisterScreen(backTodoListScreen: () -> Unit) {
     val text = remember {
         mutableStateOf("")
     }
     Scaffold(
-        topBar = { TodoRegisterAppBar() },
+        topBar = { TodoRegisterAppBar(backTodoListScreen) },
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,12 +81,12 @@ fun TodoRegisterScreen() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterAppBar() {
+fun TodoRegisterAppBar(backTodoListScreen: () -> Unit) {
     TopAppBar(
         title = { Text("Todo登録", color = Color.White) },
         navigationIcon = {
             IconButton(
-                onClick = {}
+                onClick = { backTodoListScreen() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -102,5 +102,5 @@ fun TodoRegisterAppBar() {
 @Preview(showBackground = true)
 @Composable
 fun TodoRegisterScreenPreview() {
-    TodoRegisterScreen()
+    TodoRegisterScreen {}
 }
