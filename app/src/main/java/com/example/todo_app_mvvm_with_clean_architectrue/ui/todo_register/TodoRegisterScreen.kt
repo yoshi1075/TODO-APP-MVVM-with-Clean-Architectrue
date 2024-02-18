@@ -10,6 +10,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,9 +33,8 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoRegisterScreen(backTodoListScreen: () -> Unit) {
-    val text = remember {
-        mutableStateOf("")
-    }
+    val titleText = remember { mutableStateOf("") }
+    val detailText = remember { mutableStateOf("") }
     Scaffold(
         topBar = { TodoRegisterAppBar(backTodoListScreen) },
     ) {
@@ -54,8 +54,8 @@ fun TodoRegisterScreen(backTodoListScreen: () -> Unit) {
                     .padding(top = 8.dp)
             )
             TextField(
-                value = text.value,
-                onValueChange = { text.value = it },
+                value = titleText.value,
+                onValueChange = { titleText.value = it },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,8 +68,8 @@ fun TodoRegisterScreen(backTodoListScreen: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
             )
             TextField(
-                value = text.value,
-                onValueChange = { text.value = it },
+                value = detailText.value,
+                onValueChange = { detailText.value = it },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -95,7 +95,18 @@ fun TodoRegisterAppBar(backTodoListScreen: () -> Unit) {
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
+        actions = {
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = "Check",
+                    tint = Color.White
+                )
+            }
+        }
     )
 }
 
