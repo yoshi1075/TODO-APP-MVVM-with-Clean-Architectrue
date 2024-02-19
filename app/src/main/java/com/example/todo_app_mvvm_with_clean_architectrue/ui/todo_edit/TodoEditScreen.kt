@@ -38,7 +38,7 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
     val titleText = remember { mutableStateOf(todo.title) }
     val detailText = remember { mutableStateOf(todo.detail) }
         Scaffold(
-            topBar = { TodoRegisterAppBar(backToTodoListScreen) },
+            topBar = { TodoEditAppBar(backToTodoListScreen) },
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,7 +83,7 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit) {
+fun TodoEditAppBar(backToTodoListScreen: () -> Unit) {
     TopAppBar(
         title = { Text("Todo編集", color = Color.White) },
         navigationIcon = {
@@ -114,6 +114,6 @@ fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun TodoRegisterScreenPreview() {
+fun TodoEditScreenPreview() {
     TodoEditScreen(1, {})
 }
