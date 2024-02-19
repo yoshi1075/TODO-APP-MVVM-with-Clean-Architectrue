@@ -1,4 +1,4 @@
-package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register
+package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,61 +29,63 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterScreen(backToTodoListScreen: () -> Unit) {
-    val titleText = remember { mutableStateOf("") }
-    val detailText = remember { mutableStateOf("") }
-    Scaffold(
-        topBar = { TodoRegisterAppBar(backToTodoListScreen) },
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(it)
-                .padding(horizontal = 16.dp),
+fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
+    val todo = Todo(title = "title$todoId")
+    val titleText = remember { mutableStateOf(todo.title) }
+    val detailText = remember { mutableStateOf(todo.detail) }
+        Scaffold(
+            topBar = { TodoRegisterAppBar(backToTodoListScreen) },
         ) {
-            Text(
-                text = "タイトル",
-                fontSize = 16.sp,
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
-            )
-            TextField(
-                value = titleText.value,
-                onValueChange = { titleText.value = it },
-                textStyle = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "詳細",
-                fontSize = 16.sp,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            TextField(
-                value = detailText.value,
-                onValueChange = { detailText.value = it },
-                textStyle = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(480.dp),
-            )
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(it)
+                    .padding(horizontal = 16.dp),
+            ) {
+                Text(
+                    text = "タイトル",
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                )
+                TextField(
+                    value = titleText.value,
+                    onValueChange = { titleText.value = it },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(48.dp),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "詳細",
+                    fontSize = 16.sp,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                TextField(
+                    value = detailText.value,
+                    onValueChange = { detailText.value = it },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(480.dp),
+                )
+            }
         }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit) {
     TopAppBar(
-        title = { Text("Todo登録", color = Color.White) },
+        title = { Text("Todo編集", color = Color.White) },
         navigationIcon = {
             IconButton(
                 onClick = { backToTodoListScreen() }
@@ -113,5 +115,5 @@ fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun TodoRegisterScreenPreview() {
-    TodoRegisterScreen {}
+    TodoEditScreen(1, {})
 }

@@ -1,6 +1,8 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -32,6 +34,7 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwit
 @Composable
 fun TodoListScreen(
     navigateToTodoRegisterScreen: () -> Unit,
+    navigateToTodoEditScreen: (Int) -> Unit,
 ) {
     Scaffold(
         topBar = { TodoListAppBar() },
@@ -46,6 +49,9 @@ fun TodoListScreen(
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clickable { navigateToTodoEditScreen(index) }
+                        .fillMaxWidth()
                 ) {
                     Checkbox(
                         checked = todo.value.isDone,
@@ -88,6 +94,6 @@ fun AddingTodoFloatingButton(navigateToTodoRegisterScreen: () -> Unit) {
 @Composable
 fun TodoListScreenPreview() {
     TODOAPPMVVMwithCleanArchitectrueTheme {
-        TodoListScreen {}
+        TodoListScreen({}, {})
     }
 }
