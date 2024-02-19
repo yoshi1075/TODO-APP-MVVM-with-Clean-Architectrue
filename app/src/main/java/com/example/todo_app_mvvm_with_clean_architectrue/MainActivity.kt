@@ -4,10 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwithCleanArchitectrueTheme
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.TodoEditScreen
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.TodoListScreen
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.TodoRegisterScreen
 
@@ -24,12 +27,22 @@ class MainActivity : ComponentActivity() {
                 ) {
                     composable("list") {
                         TodoListScreen(
-                            navigateToTodoRegisterScreen = { navController.navigate("register") }
+                            navigateToTodoRegisterScreen = { navController.navigate("register") },
+                            navigateToTodoEditScreen = { todoId -> navController.navigate("edit/$todoId") }
                         )
                     }
                     composable("register") {
                         TodoRegisterScreen(
-                            backTodoListScreen = { navController.popBackStack() }
+                            backToTodoListScreen = { navController.popBackStack() }
+                        )
+                    }
+                    composable(
+                        "edit/{todoId}",
+                        arguments = listOf(navArgument("todoId") { type = NavType.IntType })
+                    ) {
+                        TodoEditScreen(
+                            backToTodoListScreen = { navController.popBackStack() },
+                            todoId = it.arguments?.getInt("todoId") ?: 0
                         )
                     }
                 }

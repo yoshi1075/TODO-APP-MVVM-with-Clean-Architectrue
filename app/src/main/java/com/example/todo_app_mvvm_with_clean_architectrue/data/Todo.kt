@@ -5,5 +5,6 @@ import java.util.UUID
 data class Todo(
     val id: UUID = UUID.randomUUID(),
     val title: String,
+    val detail: String = "",
     val isDone: Boolean = false,
 )
