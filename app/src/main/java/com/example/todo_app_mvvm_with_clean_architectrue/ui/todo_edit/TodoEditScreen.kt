@@ -44,73 +44,73 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
     val detailText = remember { mutableStateOf(todo.detail) }
     var showsDialog by remember { mutableStateOf(false) }
 
-        Scaffold(
-            topBar = { TodoEditAppBar({ showsDialog = true }, backToTodoListScreen) },
-        ) {
-            if (showsDialog) {
-                AlertDialog(
-                    onDismissRequest = { showsDialog = false },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                // TODO: 削除処理
-                                showsDialog = false
-                            }
-                        ) {
-                            Text("削除")
+    Scaffold(
+        topBar = { TodoEditAppBar({ showsDialog = true }, backToTodoListScreen) },
+    ) {
+        if (showsDialog) {
+            AlertDialog(
+                onDismissRequest = { showsDialog = false },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            // TODO: 削除処理
+                            showsDialog = false
                         }
-                    },
-                    dismissButton = {
-                        Button(
-                            onClick = { showsDialog = false }
-                        ) {
-                            Text("キャンセル")
-                        }
-                    },
-                    title = { Text(text = "Todoを削除しますか？") },
-                    text = { Text(text = "この動作は取り消せません") },
-                )
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(it)
-                    .padding(horizontal = 16.dp),
-            ) {
-                Text(
-                    text = "タイトル",
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp)
-                )
-                TextField(
-                    value = titleText.value,
-                    onValueChange = { titleText.value = it },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = "詳細",
-                    fontSize = 16.sp,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                TextField(
-                    value = detailText.value,
-                    onValueChange = { detailText.value = it },
-                    textStyle = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(480.dp),
-                )
-            }
+                    ) {
+                        Text("削除")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { showsDialog = false }
+                    ) {
+                        Text("キャンセル")
+                    }
+                },
+                title = { Text(text = "Todoを削除しますか？") },
+                text = { Text(text = "この動作は取り消せません") },
+            )
         }
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(it)
+                .padding(horizontal = 16.dp),
+        ) {
+            Text(
+                text = "タイトル",
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            )
+            TextField(
+                value = titleText.value,
+                onValueChange = { titleText.value = it },
+                textStyle = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "詳細",
+                fontSize = 16.sp,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            TextField(
+                value = detailText.value,
+                onValueChange = { detailText.value = it },
+                textStyle = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(480.dp),
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
