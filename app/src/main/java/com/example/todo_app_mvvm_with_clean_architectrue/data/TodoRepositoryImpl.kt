@@ -4,8 +4,9 @@ import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoDao
 import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class TodoRepositoryImpl(
+class TodoRepositoryImpl @Inject constructor(
     private val dao: TodoDao
 ) : TodoRepository {
     override suspend fun getTodos(): Flow<List<Todo>> {
