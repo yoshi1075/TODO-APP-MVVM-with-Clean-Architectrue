@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -40,6 +41,10 @@ fun TodoListScreen(
 ) {
     val uiState by todoListViewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        todoListViewModel.onLaunched()
+    }
+
     Scaffold(
         topBar = { TodoListAppBar() },
         floatingActionButton = { AddingTodoFloatingButton(navigateToTodoRegisterScreen) },
@@ -47,11 +52,11 @@ fun TodoListScreen(
         LazyColumn(
             modifier = Modifier.padding(it)
         ) {
-            itemsIndexed(uiState.todos) { index, todo ->
+            items(uiState.todos) {todo ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .clickable { navigateToTodoEditScreen(index) }
+                        .clickable { navigateToTodoEditScreen(todo.id) }
                         .fillMaxWidth()
                 ) {
                     Checkbox(
