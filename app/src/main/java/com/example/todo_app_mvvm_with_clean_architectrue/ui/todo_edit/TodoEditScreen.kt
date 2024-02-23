@@ -24,37 +24,45 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
-    val todo = Todo(title = "title$todoId")
-    val titleText = remember { mutableStateOf(todo.title) }
-    val detailText = remember { mutableStateOf(todo.detail) }
-    var showsDialog by remember { mutableStateOf(false) }
+fun TodoEditScreen(
+    todoId: Int, backToTodoListScreen: () -> Unit,
+    todoEditViewModel: TodoEditViewModel = viewModel(),
+) {
+    val uiState by todoEditViewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        todoEditViewModel.onLaunched(todoId)
+    }
 
     Scaffold(
-        topBar = { TodoEditAppBar({ showsDialog = true }, backToTodoListScreen) },
+        topBar = {
+            TodoEditAppBar(
+                backToTodoListScreen,
+                todoEditViewModel
+            )
+        },
     ) {
-        if (showsDialog) {
+        if (uiState.showsDialog) {
             AlertDialog(
-                onDismissRequest = { showsDialog = false },
+                onDismissRequest = {},
                 confirmButton = {
                     Button(
                         onClick = {
                             // TODO: 削除処理
-                            showsDialog = false
+                            todoEditViewModel.onDeleteConfirmed()
                         }
                     ) {
                         Text("削除")
@@ -62,7 +70,7 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
                 },
                 dismissButton = {
                     Button(
-                        onClick = { showsDialog = false }
+                        onClick = { todoEditViewModel.onDialogDismissRequested() }
                     ) {
                         Text("キャンセル")
                     }
@@ -88,8 +96,8 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
                     .padding(top = 8.dp)
             )
             TextField(
-                value = titleText.value,
-                onValueChange = { titleText.value = it },
+                value = uiState.title,
+                onValueChange = { todoEditViewModel.onTitleUpdated(it) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,8 +110,8 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
             )
             TextField(
-                value = detailText.value,
-                onValueChange = { detailText.value = it },
+                value = uiState.detail,
+                onValueChange = { todoEditViewModel.onDetailUpdated(it) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,7 +123,10 @@ fun TodoEditScreen(todoId: Int, backToTodoListScreen: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoEditAppBar(showDialog: () -> Unit, backToTodoListScreen: () -> Unit) {
+fun TodoEditAppBar(
+    backToTodoListScreen: () -> Unit,
+    todoEditViewModel: TodoEditViewModel,
+) {
     TopAppBar(
         title = { Text("Todo編集", color = Color.White) },
         navigationIcon = {
@@ -132,7 +143,7 @@ fun TodoEditAppBar(showDialog: () -> Unit, backToTodoListScreen: () -> Unit) {
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
         actions = {
             IconButton(
-                onClick = { showDialog() }
+                onClick = { todoEditViewModel.onDeleteIconTapped() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
@@ -141,7 +152,9 @@ fun TodoEditAppBar(showDialog: () -> Unit, backToTodoListScreen: () -> Unit) {
                 )
             }
             IconButton(
-                onClick = { backToTodoListScreen() }
+                onClick = {
+                    todoEditViewModel.onCompleteIconTapped()
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
