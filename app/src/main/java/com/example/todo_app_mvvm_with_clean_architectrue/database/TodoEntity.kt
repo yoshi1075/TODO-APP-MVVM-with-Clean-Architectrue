@@ -15,4 +15,10 @@ data class TodoEntity(
     fun toTodo(): Todo {
         return Todo(id = todoId, title = title, detail = detail, isDone = isDone)
     }
+
+    companion object {
+        fun fromTodo(todo: Todo): TodoEntity {
+            return TodoEntity(todo.id, todo.title, todo.detail, todo.isDone)
+        }
+    }
 }

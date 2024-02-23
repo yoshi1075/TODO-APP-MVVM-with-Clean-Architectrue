@@ -1,6 +1,7 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.data
 
 import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoDao
+import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -16,14 +17,14 @@ class TodoRepositoryImpl(
     }
 
     override suspend fun registerTodo(todo: Todo) {
-        dao.insertTodo(todo.toTodoEntity())
+        dao.insertTodo(TodoEntity.fromTodo(todo))
     }
 
     override suspend fun updateTodo(todo: Todo) {
-        dao.updateTodo(todo.toTodoEntity())
+        dao.updateTodo(TodoEntity.fromTodo(todo))
     }
 
     override suspend fun deleteTodo(todo: Todo) {
-        dao.deleteTodo(todo.toTodoEntity())
+        dao.deleteTodo(TodoEntity.fromTodo(todo))
     }
 }
