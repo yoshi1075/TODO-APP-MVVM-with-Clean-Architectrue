@@ -26,16 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwithCleanArchitectrueTheme
 
 @ExperimentalMaterial3Api
 @Composable
 fun TodoListScreen(
-    todoListViewModel: TodoListViewModel = viewModel(),
+    todoListViewModel: TodoListViewModel,
     navigateToTodoRegisterScreen: () -> Unit,
     navigateToTodoEditScreen: (Int) -> Unit,
 ) {
@@ -92,14 +89,5 @@ fun AddingTodoFloatingButton(navigateToTodoRegisterScreen: () -> Unit) {
     FloatingActionButton(
         onClick = { navigateToTodoRegisterScreen() }) {
         Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun TodoListScreenPreview() {
-    TODOAPPMVVMwithCleanArchitectrueTheme {
-        TodoListScreen(navigateToTodoEditScreen = {}, navigateToTodoRegisterScreen = {})
     }
 }

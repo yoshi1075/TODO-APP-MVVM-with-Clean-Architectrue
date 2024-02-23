@@ -1,30 +1,24 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
-import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepositoryMock
+import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class TodoEditViewModel : ViewModel() {
+class TodoEditViewModel(private val todoRepository: TodoRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(TodoEditUiState())
     val uiState = _uiState.asStateFlow()
 
     fun onLaunched(todoId: Int) {
         viewModelScope.launch {
-            TodoRepositoryMock.getTodo(todoId)
-                .onEach { todo ->
-                    _uiState.update {
-                        uiState.value.copy(todoId = todoId, title = todo.title, detail = todo.detail)
-                    }
+            todoRepository.getTodo(todoId).let { todo ->
+                _uiState.update {
+                    uiState.value.copy(todo = todo, title = todo.title, detail = todo.detail)
                 }
-                .launchIn(this)
+            }
         }
     }
 
@@ -48,13 +42,10 @@ class TodoEditViewModel : ViewModel() {
 
     fun onDeleteConfirmed() {
         viewModelScope.launch {
-            TodoRepositoryMock.deleteTodo(todoId = uiState.value.todoId)
-                .onEach { isSuccess ->
-                    _uiState.update {
-                        uiState.value.copy(showsDialog = false)
-                    }
-                }
-                .launchIn(this)
+            todoRepository.deleteTodo(todo = uiState.value.todo)
+            _uiState.update {
+                uiState.value.copy(showsDialog = false)
+            }
         }
     }
 
@@ -66,16 +57,11 @@ class TodoEditViewModel : ViewModel() {
 
     fun onCompleteIconTapped() {
         viewModelScope.launch {
-            val todo = Todo(
+            val newTodo = uiState.value.todo.copy(
                 title = uiState.value.title,
                 detail = uiState.value.detail
             )
-            TodoRepositoryMock.updateTodo(todo)
-                .onEach { isSuccess ->
-                    // TODO: display result
-                    Log.d("register isSuccess: ", isSuccess.toString())
-                }
-                .launchIn(this)
+            todoRepository.updateTodo(newTodo)
         }
     }
 }

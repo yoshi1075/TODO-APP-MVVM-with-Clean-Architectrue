@@ -1,18 +1,15 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
-import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepositoryMock
+import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class TodoRegisterViewModel : ViewModel() {
+class TodoRegisterViewModel(private val todoRepository: TodoRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(TodoRegisterUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -34,12 +31,7 @@ class TodoRegisterViewModel : ViewModel() {
                 title = uiState.value.title,
                 detail = uiState.value.detail
             )
-            TodoRepositoryMock.registerTodo(todo)
-                .onEach { isSuccess ->
-                    // TODO: display result
-                    Log.d("register isSuccess: ", isSuccess.toString())
-                }
-                .launchIn(this)
+            todoRepository.registerTodo(todo)
         }
     }
 }
