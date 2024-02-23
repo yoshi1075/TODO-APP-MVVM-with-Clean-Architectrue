@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
@@ -17,8 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -27,15 +28,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwithCleanArchitectrueTheme
 
 @ExperimentalMaterial3Api
 @Composable
 fun TodoListScreen(
+    todoListViewModel: TodoListViewModel = viewModel(),
     navigateToTodoRegisterScreen: () -> Unit,
     navigateToTodoEditScreen: (Int) -> Unit,
 ) {
+    val uiState by todoListViewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = { TodoListAppBar() },
         floatingActionButton = { AddingTodoFloatingButton(navigateToTodoRegisterScreen) },
@@ -43,10 +47,7 @@ fun TodoListScreen(
         LazyColumn(
             modifier = Modifier.padding(it)
         ) {
-            items(50) { index ->
-                val todo = remember {
-                    mutableStateOf(Todo(title = "title$index"))
-                }
+            itemsIndexed(uiState.todos) { index, todo ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -54,13 +55,13 @@ fun TodoListScreen(
                         .fillMaxWidth()
                 ) {
                     Checkbox(
-                        checked = todo.value.isDone,
+                        checked = todo.isDone,
                         onCheckedChange = {
-                            todo.value = todo.value.copy(isDone = it)
+                            todoListViewModel.onChangedTodoChecked(todo, it)
                         }
                     )
                     Text(
-                        todo.value.title,
+                        todo.title,
                         fontSize = 16.sp,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -94,6 +95,6 @@ fun AddingTodoFloatingButton(navigateToTodoRegisterScreen: () -> Unit) {
 @Composable
 fun TodoListScreenPreview() {
     TODOAPPMVVMwithCleanArchitectrueTheme {
-        TodoListScreen({}, {})
+        TodoListScreen(navigateToTodoEditScreen = {}, navigateToTodoRegisterScreen = {})
     }
 }
