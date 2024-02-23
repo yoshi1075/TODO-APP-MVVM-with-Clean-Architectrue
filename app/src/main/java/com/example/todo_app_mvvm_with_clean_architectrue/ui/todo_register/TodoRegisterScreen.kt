@@ -21,22 +21,25 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterScreen(backToTodoListScreen: () -> Unit) {
-    val titleText = remember { mutableStateOf("") }
-    val detailText = remember { mutableStateOf("") }
+fun TodoRegisterScreen(
+    todoRegisterViewModel: TodoRegisterViewModel = viewModel(),
+    backToTodoListScreen: () -> Unit
+) {
+    val uiState by todoRegisterViewModel.uiState.collectAsState()
     Scaffold(
-        topBar = { TodoRegisterAppBar(backToTodoListScreen) },
+        topBar = { TodoRegisterAppBar(backToTodoListScreen, todoRegisterViewModel) },
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,8 +57,8 @@ fun TodoRegisterScreen(backToTodoListScreen: () -> Unit) {
                     .padding(top = 8.dp)
             )
             TextField(
-                value = titleText.value,
-                onValueChange = { titleText.value = it },
+                value = uiState.title,
+                onValueChange = { todoRegisterViewModel.onTitleUpdated(it) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,8 +71,8 @@ fun TodoRegisterScreen(backToTodoListScreen: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
             )
             TextField(
-                value = detailText.value,
-                onValueChange = { detailText.value = it },
+                value = uiState.detail,
+                onValueChange = { todoRegisterViewModel.onDetailUpdated(it) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,7 +84,10 @@ fun TodoRegisterScreen(backToTodoListScreen: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit) {
+fun TodoRegisterAppBar(
+    backToTodoListScreen: () -> Unit,
+    todoRegisterViewModel: TodoRegisterViewModel,
+) {
     TopAppBar(
         title = { Text("Todo登録", color = Color.White) },
         navigationIcon = {
@@ -98,7 +104,7 @@ fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit) {
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
         actions = {
             IconButton(
-                onClick = { backToTodoListScreen() }
+                onClick = { todoRegisterViewModel.onRegisterButtonTapped() }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
