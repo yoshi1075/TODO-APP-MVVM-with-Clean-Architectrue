@@ -28,11 +28,12 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun TodoListScreen(
-    todoListViewModel: TodoListViewModel,
+    todoListViewModel: TodoListViewModel = hiltViewModel(),
     navigateToTodoRegisterScreen: () -> Unit,
     navigateToTodoEditScreen: (Int) -> Unit,
 ) {
