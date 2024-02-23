@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -75,4 +76,9 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2") // for room coroutine
     ksp("androidx.room:room-compiler:2.5.2")
+
+    // dagger hilt
+    implementation("com.google.dagger:hilt-android:2.47")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0") // viewModelの取得
+    ksp("com.google.dagger:hilt-android-compiler:2.47")
 }
