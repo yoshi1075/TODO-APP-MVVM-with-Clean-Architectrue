@@ -24,10 +24,12 @@ class TodoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateTodo(todo: Todo) {
+        delay(300L)
         dao.updateTodo(TodoEntity.fromTodo(todo))
     }
 
     override suspend fun deleteTodo(todo: Todo) {
+        delay(300L)
         dao.deleteTodo(TodoEntity.fromTodo(todo))
     }
 }

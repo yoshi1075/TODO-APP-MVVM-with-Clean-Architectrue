@@ -49,7 +49,10 @@ class TodoEditViewModel @Inject constructor(
         viewModelScope.launch {
             todoRepository.deleteTodo(todo = uiState.value.todo)
             _uiState.update {
-                uiState.value.copy(showsDialog = false)
+                uiState.value.copy(
+                    showsDialog = false,
+                    event = TodoEditEvent.ShowSnackbar("Todoを削除しました")
+                )
             }
         }
     }
@@ -67,6 +70,15 @@ class TodoEditViewModel @Inject constructor(
                 detail = uiState.value.detail
             )
             todoRepository.updateTodo(newTodo)
+            _uiState.update {
+                uiState.value.copy(event = TodoEditEvent.ShowSnackbar("更新に成功しました"))
+            }
+        }
+    }
+
+    fun onSnackbarDismissed() {
+        _uiState.update {
+            uiState.value.copy(event = TodoEditEvent.NavigateToListScreen)
         }
     }
 }

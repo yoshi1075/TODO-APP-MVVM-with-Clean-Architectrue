@@ -7,4 +7,5 @@ data class TodoEditUiState(
     val title: String = "",
     val detail: String = "",
     val showsDialog: Boolean = false,
+    val event: TodoEditEvent = TodoEditEvent.Nothing
 )

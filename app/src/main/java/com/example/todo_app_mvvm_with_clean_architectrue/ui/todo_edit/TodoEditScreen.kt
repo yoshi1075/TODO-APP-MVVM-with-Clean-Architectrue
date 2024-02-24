@@ -19,6 +19,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -42,9 +46,32 @@ fun TodoEditScreen(
     backToTodoListScreen: () -> Unit,
 ) {
     val uiState by todoEditViewModel.uiState.collectAsState()
+    val hostState = SnackbarHostState()
 
     LaunchedEffect(Unit) {
         todoEditViewModel.onLaunched(todoId)
+    }
+
+    LaunchedEffect(uiState.event) {
+        when (val event = uiState.event) {
+            TodoEditEvent.NavigateToListScreen -> {
+                backToTodoListScreen()
+            }
+            is TodoEditEvent.ShowSnackbar -> {
+                val result = hostState.showSnackbar(
+                    message = event.message,
+                    duration = SnackbarDuration.Short,
+                    withDismissAction = true,
+                )
+                when (result) {
+                    SnackbarResult.Dismissed,
+                    SnackbarResult.ActionPerformed -> {
+                        todoEditViewModel.onSnackbarDismissed()
+                    }
+                }
+            }
+            TodoEditEvent.Nothing -> {}
+        }
     }
 
     Scaffold(
@@ -54,6 +81,7 @@ fun TodoEditScreen(
                 todoEditViewModel
             )
         },
+        snackbarHost = { SnackbarHost(hostState) }
     ) {
         if (uiState.showsDialog) {
             AlertDialog(
