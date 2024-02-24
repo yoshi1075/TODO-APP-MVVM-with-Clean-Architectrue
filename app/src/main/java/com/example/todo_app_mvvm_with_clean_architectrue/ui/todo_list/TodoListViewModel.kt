@@ -22,9 +22,17 @@ class TodoListViewModel @Inject constructor(
 
     fun onLaunched() {
         viewModelScope.launch {
+            _uiState.update {
+                uiState.value.copy(showsLoadingDialog = true)
+            }
             todoRepository.getTodos()
                 .onEach { todos ->
-                    _uiState.update { uiState.value.copy(todos = todos ) }
+                    _uiState.update {
+                        uiState.value.copy(
+                            todos = todos,
+                            showsLoadingDialog = false
+                        )
+                    }
                 }
                 .launchIn(this)
         }
