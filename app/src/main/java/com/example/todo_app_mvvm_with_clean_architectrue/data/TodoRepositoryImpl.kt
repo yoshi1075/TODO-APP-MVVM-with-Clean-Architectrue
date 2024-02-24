@@ -2,6 +2,7 @@ package com.example.todo_app_mvvm_with_clean_architectrue.data
 
 import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoDao
 import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoEntity
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,6 +19,7 @@ class TodoRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerTodo(todo: Todo) {
+        delay(500L)
         dao.insertTodo(TodoEntity.fromTodo(todo))
     }
 
