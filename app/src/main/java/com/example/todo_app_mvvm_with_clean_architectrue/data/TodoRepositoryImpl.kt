@@ -11,7 +11,6 @@ class TodoRepositoryImpl @Inject constructor(
     private val dao: TodoDao
 ) : TodoRepository {
     override suspend fun getTodos(): Flow<List<Todo>> {
-        delay(1000L)
         return dao.getTodos().map { it.map { it.toTodo() } }
     }
 
