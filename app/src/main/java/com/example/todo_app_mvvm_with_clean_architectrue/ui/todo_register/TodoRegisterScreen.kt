@@ -50,10 +50,10 @@ fun TodoRegisterScreen(
 
     ObserveAsEvent(todoRegisterViewModel.oneTimeEvent) { event ->
         when (event) {
-            TodoRegisterEvent.NavigateToListScreen -> {
+            TodoRegisterOneTimeEvent.NavigateToListScreen -> {
                 backToTodoListScreen()
             }
-            is TodoRegisterEvent.ShowSnackbar -> {
+            is TodoRegisterOneTimeEvent.ShowSnackbar -> {
                 scope.launch {
                     val result = hostState.showSnackbar(
                         message = event.message,

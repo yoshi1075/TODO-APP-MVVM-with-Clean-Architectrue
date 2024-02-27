@@ -20,7 +20,7 @@ class TodoRegisterViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(TodoRegisterUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val _oneTimeEvent = Channel<TodoRegisterEvent>()
+    private val _oneTimeEvent = Channel<TodoRegisterOneTimeEvent>()
     val oneTimeEvent = _oneTimeEvent.receiveAsFlow()
 
     fun onTitleUpdated(title: String) {
@@ -42,11 +42,11 @@ class TodoRegisterViewModel @Inject constructor(
                 detail = uiState.value.detail
             )
             todoRepository.registerTodo(todo)
-            _oneTimeEvent.send(TodoRegisterEvent.ShowSnackbar("Success"))
+            _oneTimeEvent.send(TodoRegisterOneTimeEvent.ShowSnackbar("Success"))
         }
     }
 
     suspend fun backTodoListScreen() {
-        _oneTimeEvent.send(TodoRegisterEvent.NavigateToListScreen)
+        _oneTimeEvent.send(TodoRegisterOneTimeEvent.NavigateToListScreen)
     }
 }
