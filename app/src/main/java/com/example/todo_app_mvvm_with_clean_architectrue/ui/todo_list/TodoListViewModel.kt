@@ -2,7 +2,6 @@ package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
 import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,28 +19,31 @@ class TodoListViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<TodoListUiState> = MutableStateFlow(TodoListUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun onLaunched() {
-        viewModelScope.launch {
-            _uiState.update {
-                uiState.value.copy(showsLoadingDialog = true)
-            }
-            todoRepository.getTodos()
-                .onEach { todos ->
+    fun onEvent(event: TodoListEvent) {
+        when (event) {
+            TodoListEvent.OnLaunched -> {
+                viewModelScope.launch {
                     _uiState.update {
-                        uiState.value.copy(
-                            todos = todos,
-                            showsLoadingDialog = false
-                        )
+                        uiState.value.copy(showsLoadingDialog = true)
                     }
+                    todoRepository.getTodos()
+                        .onEach { todos ->
+                            _uiState.update {
+                                uiState.value.copy(
+                                    todos = todos,
+                                    showsLoadingDialog = false
+                                )
+                            }
+                        }
+                        .launchIn(this)
                 }
-                .launchIn(this)
-        }
-    }
-
-    fun onChangedTodoChecked(todo: Todo, isChecked: Boolean) {
-        val newTodo = todo.copy(isDone = isChecked)
-        viewModelScope.launch {
-            todoRepository.updateTodo(newTodo)
+            }
+            is TodoListEvent.OnChangedTodoChecked -> {
+                val newTodo = event.todo.copy(isDone = event.isChecked)
+                viewModelScope.launch {
+                    todoRepository.updateTodo(newTodo)
+                }
+            }
         }
     }
 }

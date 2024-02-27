@@ -17,68 +17,70 @@ class TodoEditViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(TodoEditUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun onLaunched(todoId: Int) {
-        viewModelScope.launch {
-            todoRepository.getTodo(todoId).let { todo ->
-                _uiState.update {
-                    uiState.value.copy(todo = todo, title = todo.title, detail = todo.detail)
+    fun onEvent(event: TodoEditEvent) {
+        when (event) {
+            is TodoEditEvent.OnLaunched -> {
+                viewModelScope.launch {
+                    todoRepository.getTodo(event.todoId).let { todo ->
+                        _uiState.update {
+                            uiState.value.copy(todo = todo, title = todo.title, detail = todo.detail)
+                        }
+                    }
                 }
             }
-        }
-    }
-
-    fun onTitleUpdated(title: String) {
-        _uiState.update {
-            uiState.value.copy(title = title)
-        }
-    }
-
-    fun onDetailUpdated(detail: String) {
-        _uiState.update {
-            uiState.value.copy(detail = detail)
-        }
-    }
-
-    fun onDeleteIconTapped() {
-        _uiState.update {
-            uiState.value.copy(showsDialog = true)
-        }
-    }
-
-    fun onDeleteConfirmed() {
-        viewModelScope.launch {
-            todoRepository.deleteTodo(todo = uiState.value.todo)
-            _uiState.update {
-                uiState.value.copy(
-                    showsDialog = false,
-                    event = TodoEditEvent.ShowSnackbar("Todoを削除しました")
-                )
+            is TodoEditEvent.OnTitleUpdated -> {
+                _uiState.update {
+                    uiState.value.copy(title = event.title)
+                }
             }
-        }
-    }
-
-    fun onDialogDismissRequested() {
-        _uiState.update {
-            uiState.value.copy(showsDialog = false)
-        }
-    }
-
-    fun onCompleteIconTapped() {
-        viewModelScope.launch {
-            val newTodo = uiState.value.todo.copy(
-                title = uiState.value.title,
-                detail = uiState.value.detail
-            )
-            todoRepository.updateTodo(newTodo)
-            _uiState.update {
-                uiState.value.copy(event = TodoEditEvent.ShowSnackbar("更新に成功しました"))
+            is TodoEditEvent.OnDetailUpdated -> {
+                _uiState.update {
+                    uiState.value.copy(detail = event.detail)
+                }
             }
-        }
-    }
-
-    fun onSnackbarDismissed() {
-        _uiState.update {
-            uiState.value.copy(event = TodoEditEvent.NavigateToListScreen)
+            TodoEditEvent.OnDeleteIconTapped -> {
+                _uiState.update {
+                    uiState.value.copy(showsDialog = true)
+                }
+            }
+            TodoEditEvent.OnDeleteConfirmed -> {
+                viewModelScope.launch {
+                    todoRepository.deleteTodo(todo = uiState.value.todo)
+                    _uiState.update {
+                        uiState.value.copy(
+                            showsDialog = false,
+                            oneTimeEvent = TodoEditOneTimeEvent.ShowSnackbar("Todoを削除しました")
+                        )
+                    }
+                }
+            }
+            TodoEditEvent.OnDialogDismissRequested -> {
+                _uiState.update {
+                    uiState.value.copy(showsDialog = false)
+                }
+            }
+            TodoEditEvent.OnCompleteIconTapped -> {
+                viewModelScope.launch {
+                    val newTodo = uiState.value.todo.copy(
+                        title = uiState.value.title,
+                        detail = uiState.value.detail
+                    )
+                    todoRepository.updateTodo(newTodo)
+                    _uiState.update {
+                        uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.ShowSnackbar("更新に成功しました"))
+                    }
+                }
+            }
+            TodoEditEvent.OnSnackbarDismissed -> {
+                _uiState.update {
+                    uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.NavigateToListScreen)
+                }
+            }
+            TodoEditEvent.OnEventConsumed -> {
+                _uiState.update {
+                    uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.Nothing)
+                }
+            }
         }
     }
 }

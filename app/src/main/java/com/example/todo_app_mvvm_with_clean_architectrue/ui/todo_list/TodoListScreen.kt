@@ -23,8 +23,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -32,19 +30,17 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @ExperimentalMaterial3Api
 @Composable
 fun TodoListScreen(
-    todoListViewModel: TodoListViewModel = hiltViewModel(),
+    state: TodoListUiState,
+    onEvent: (TodoListEvent) -> Unit,
     navigateToTodoRegisterScreen: () -> Unit,
     navigateToTodoEditScreen: (Int) -> Unit,
 ) {
-    val uiState by todoListViewModel.uiState.collectAsState()
-
     LaunchedEffect(Unit) {
-        todoListViewModel.onLaunched()
+        onEvent(TodoListEvent.OnLaunched)
     }
 
     Scaffold(
@@ -54,7 +50,7 @@ fun TodoListScreen(
         LazyColumn(
             modifier = Modifier.padding(it)
         ) {
-            items(uiState.todos) {todo ->
+            items(state.todos) { todo ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -64,7 +60,7 @@ fun TodoListScreen(
                     Checkbox(
                         checked = todo.isDone,
                         onCheckedChange = {
-                            todoListViewModel.onChangedTodoChecked(todo, it)
+                            onEvent(TodoListEvent.OnChangedTodoChecked(todo, it))
                         }
                     )
                     Text(
@@ -78,7 +74,7 @@ fun TodoListScreen(
             }
         }
 
-        if (uiState.showsLoadingDialog) {
+        if (state.showsLoadingDialog) {
             Box(
                 contentAlignment= Alignment.Center,
                 modifier = Modifier
