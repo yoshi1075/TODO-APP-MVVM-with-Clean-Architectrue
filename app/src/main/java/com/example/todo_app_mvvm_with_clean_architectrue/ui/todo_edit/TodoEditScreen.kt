@@ -29,35 +29,33 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoEditScreen(
-    todoEditViewModel: TodoEditViewModel = hiltViewModel(),
+    state: TodoEditUiState,
+    onEvent: (TodoEditEvent) -> Unit,
     todoId: Int,
     backToTodoListScreen: () -> Unit,
 ) {
-    val uiState by todoEditViewModel.uiState.collectAsState()
     val hostState = SnackbarHostState()
 
     LaunchedEffect(Unit) {
-        todoEditViewModel.onLaunched(todoId)
+        onEvent(TodoEditEvent.OnLaunched(todoId))
     }
 
-    LaunchedEffect(uiState.event) {
-        when (val event = uiState.event) {
-            TodoEditEvent.NavigateToListScreen -> {
+    LaunchedEffect(state.oneTimeEvent) {
+        when (val event = state.oneTimeEvent) {
+            TodoEditOneTimeEvent.NavigateToListScreen -> {
                 backToTodoListScreen()
+                onEvent(TodoEditEvent.OnEventConsumed)
             }
-            is TodoEditEvent.ShowSnackbar -> {
+            is TodoEditOneTimeEvent.ShowSnackbar -> {
                 val result = hostState.showSnackbar(
                     message = event.message,
                     duration = SnackbarDuration.Short,
@@ -66,11 +64,12 @@ fun TodoEditScreen(
                 when (result) {
                     SnackbarResult.Dismissed,
                     SnackbarResult.ActionPerformed -> {
-                        todoEditViewModel.onSnackbarDismissed()
+                        onEvent(TodoEditEvent.OnSnackbarDismissed)
                     }
                 }
+                onEvent(TodoEditEvent.OnEventConsumed)
             }
-            TodoEditEvent.Nothing -> {}
+            TodoEditOneTimeEvent.Nothing -> {}
         }
     }
 
@@ -78,19 +77,19 @@ fun TodoEditScreen(
         topBar = {
             TodoEditAppBar(
                 backToTodoListScreen,
-                todoEditViewModel
+                onEvent,
             )
         },
         snackbarHost = { SnackbarHost(hostState) }
     ) {
-        if (uiState.showsDialog) {
+        if (state.showsDialog) {
             AlertDialog(
                 onDismissRequest = {},
                 confirmButton = {
                     Button(
                         onClick = {
                             // TODO: 削除処理
-                            todoEditViewModel.onDeleteConfirmed()
+                            onEvent(TodoEditEvent.OnDeleteConfirmed)
                         }
                     ) {
                         Text("削除")
@@ -98,7 +97,7 @@ fun TodoEditScreen(
                 },
                 dismissButton = {
                     Button(
-                        onClick = { todoEditViewModel.onDialogDismissRequested() }
+                        onClick = { onEvent(TodoEditEvent.OnDialogDismissRequested) }
                     ) {
                         Text("キャンセル")
                     }
@@ -124,8 +123,8 @@ fun TodoEditScreen(
                     .padding(top = 8.dp)
             )
             TextField(
-                value = uiState.title,
-                onValueChange = { todoEditViewModel.onTitleUpdated(it) },
+                value = state.title,
+                onValueChange = { onEvent(TodoEditEvent.OnTitleUpdated(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -138,8 +137,8 @@ fun TodoEditScreen(
                 modifier = Modifier.fillMaxWidth(),
             )
             TextField(
-                value = uiState.detail,
-                onValueChange = { todoEditViewModel.onDetailUpdated(it) },
+                value = state.detail,
+                onValueChange = { onEvent(TodoEditEvent.OnDetailUpdated(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,7 +152,7 @@ fun TodoEditScreen(
 @Composable
 fun TodoEditAppBar(
     backToTodoListScreen: () -> Unit,
-    todoEditViewModel: TodoEditViewModel,
+    onEvent: (TodoEditEvent) -> Unit,
 ) {
     TopAppBar(
         title = { Text("Todo編集", color = Color.White) },
@@ -171,7 +170,7 @@ fun TodoEditAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
         actions = {
             IconButton(
-                onClick = { todoEditViewModel.onDeleteIconTapped() }
+                onClick = { onEvent(TodoEditEvent.OnDeleteIconTapped) }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
@@ -181,7 +180,7 @@ fun TodoEditAppBar(
             }
             IconButton(
                 onClick = {
-                    todoEditViewModel.onCompleteIconTapped()
+                    onEvent(TodoEditEvent.OnCompleteIconTapped)
                 }
             ) {
                 Icon(
