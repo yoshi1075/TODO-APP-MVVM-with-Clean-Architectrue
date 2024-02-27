@@ -17,6 +17,7 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.TodoEditSc
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.TodoListScreen
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.TodoListViewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.TodoRegisterScreen
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.TodoRegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,7 +44,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("register") {
+                        val viewModel: TodoRegisterViewModel = hiltViewModel()
+                        val state by viewModel.uiState.collectAsState()
                         TodoRegisterScreen(
+                            state,
+                            viewModel.oneTimeEvent,
+                            viewModel::onEvent,
                             backToTodoListScreen = { navController.popBackStack() }
                         )
                     }

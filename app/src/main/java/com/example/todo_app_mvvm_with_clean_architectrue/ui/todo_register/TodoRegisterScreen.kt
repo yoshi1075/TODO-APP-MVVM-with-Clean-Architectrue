@@ -25,8 +25,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -34,21 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.common.ObserveAsEvent
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoRegisterScreen(
-    todoRegisterViewModel: TodoRegisterViewModel = hiltViewModel(),
+    uiState: TodoRegisterUiState,
+    oneTimeEvent: Flow<TodoRegisterOneTimeEvent>,
+    onEvent: (TodoRegisterEvent) -> Unit,
     backToTodoListScreen: () -> Unit
 ) {
-    val uiState by todoRegisterViewModel.uiState.collectAsState()
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    ObserveAsEvent(todoRegisterViewModel.oneTimeEvent) { event ->
+    ObserveAsEvent(oneTimeEvent) { event ->
         when (event) {
             TodoRegisterOneTimeEvent.NavigateToListScreen -> {
                 backToTodoListScreen()
@@ -63,7 +62,7 @@ fun TodoRegisterScreen(
                     when (result) {
                         SnackbarResult.Dismissed,
                         SnackbarResult.ActionPerformed -> {
-                            todoRegisterViewModel.backTodoListScreen()
+                            onEvent(TodoRegisterEvent.BackTodoListScreen)
                         }
                     }
                 }
@@ -72,7 +71,7 @@ fun TodoRegisterScreen(
     }
 
     Scaffold(
-        topBar = { TodoRegisterAppBar(backToTodoListScreen, todoRegisterViewModel) },
+        topBar = { TodoRegisterAppBar(backToTodoListScreen, onEvent) },
         snackbarHost = { SnackbarHost(hostState) },
     ) {
         Column(
@@ -92,7 +91,7 @@ fun TodoRegisterScreen(
             )
             TextField(
                 value = uiState.title,
-                onValueChange = { todoRegisterViewModel.onTitleUpdated(it) },
+                onValueChange = { onEvent(TodoRegisterEvent.OnTitleUpdated(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,7 +105,7 @@ fun TodoRegisterScreen(
             )
             TextField(
                 value = uiState.detail,
-                onValueChange = { todoRegisterViewModel.onDetailUpdated(it) },
+                onValueChange = { onEvent(TodoRegisterEvent.OnDetailUpdated(it)) },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,7 +119,7 @@ fun TodoRegisterScreen(
 @Composable
 fun TodoRegisterAppBar(
     backToTodoListScreen: () -> Unit,
-    todoRegisterViewModel: TodoRegisterViewModel,
+    onEvent: (TodoRegisterEvent) -> Unit,
 ) {
     TopAppBar(
         title = { Text("Todo登録", color = Color.White) },
@@ -138,7 +137,7 @@ fun TodoRegisterAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
         actions = {
             IconButton(
-                onClick = { todoRegisterViewModel.onRegisterButtonTapped() }
+                onClick = { onEvent(TodoRegisterEvent.OnRegisterButtonTapped) }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Check,

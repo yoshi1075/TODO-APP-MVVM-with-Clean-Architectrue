@@ -23,30 +23,33 @@ class TodoRegisterViewModel @Inject constructor(
     private val _oneTimeEvent = Channel<TodoRegisterOneTimeEvent>()
     val oneTimeEvent = _oneTimeEvent.receiveAsFlow()
 
-    fun onTitleUpdated(title: String) {
-        _uiState.update {
-            uiState.value.copy(title = title)
+    fun onEvent(event: TodoRegisterEvent) {
+        when (event) {
+            is TodoRegisterEvent.OnTitleUpdated -> {
+                _uiState.update {
+                    uiState.value.copy(title = event.title)
+                }
+            }
+            is TodoRegisterEvent.OnDetailUpdated -> {
+                _uiState.update {
+                    uiState.value.copy(detail = event.detail)
+                }
+            }
+            TodoRegisterEvent.OnRegisterButtonTapped -> {
+                viewModelScope.launch {
+                    val todo = Todo(
+                        title = uiState.value.title,
+                        detail = uiState.value.detail
+                    )
+                    todoRepository.registerTodo(todo)
+                    _oneTimeEvent.send(TodoRegisterOneTimeEvent.ShowSnackbar("Success"))
+                }
+            }
+            TodoRegisterEvent.BackTodoListScreen -> {
+                viewModelScope.launch {
+                    _oneTimeEvent.send(TodoRegisterOneTimeEvent.NavigateToListScreen)
+                }
+            }
         }
-    }
-
-    fun onDetailUpdated(detail: String) {
-        _uiState.update {
-            uiState.value.copy(detail = detail)
-        }
-    }
-
-    fun onRegisterButtonTapped() {
-        viewModelScope.launch {
-            val todo = Todo(
-                title = uiState.value.title,
-                detail = uiState.value.detail
-            )
-            todoRepository.registerTodo(todo)
-            _oneTimeEvent.send(TodoRegisterOneTimeEvent.ShowSnackbar("Success"))
-        }
-    }
-
-    suspend fun backTodoListScreen() {
-        _oneTimeEvent.send(TodoRegisterOneTimeEvent.NavigateToListScreen)
     }
 }
