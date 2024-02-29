@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.extensions.saveableMutableStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,9 @@ class TodoEditViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val todoRepository: TodoRepository,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(TodoEditUiState())
+    private val _uiState by savedStateHandle.saveableMutableStateFlow {
+        MutableStateFlow(TodoEditUiState())
+    }
     val uiState = _uiState.asStateFlow()
 
     fun onEvent(event: TodoEditEvent) {
@@ -25,8 +28,12 @@ class TodoEditViewModel @Inject constructor(
                 viewModelScope.launch {
                     val todoId = checkNotNull(savedStateHandle.get<Int>("todoId"))
                     todoRepository.getTodo(todoId).let { todo ->
-                        _uiState.update {
-                            uiState.value.copy(todo = todo, title = todo.title, detail = todo.detail)
+                        _uiState.update { oldState ->
+                            if (oldState.title.isBlank()) {
+                                uiState.value.copy(todo = todo, title = todo.title, detail = todo.detail)
+                            } else {
+                                uiState.value.copy(todo = todo, title = oldState.title, detail = oldState.detail)
+                            }
                         }
                     }
                 }

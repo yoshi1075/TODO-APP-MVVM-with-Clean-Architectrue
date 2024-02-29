@@ -1,8 +1,10 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.extensions.saveableMutableStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,9 +16,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
-    private val todoRepository: TodoRepository
+    savedStateHandle: SavedStateHandle,
+    private val todoRepository: TodoRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<TodoListUiState> = MutableStateFlow(TodoListUiState())
+    private val _uiState by savedStateHandle.saveableMutableStateFlow {
+        MutableStateFlow(TodoListUiState())
+    }
     val uiState = _uiState.asStateFlow()
 
     fun onEvent(event: TodoListEvent) {
