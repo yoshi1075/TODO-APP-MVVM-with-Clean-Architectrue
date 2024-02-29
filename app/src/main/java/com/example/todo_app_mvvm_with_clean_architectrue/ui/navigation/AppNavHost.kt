@@ -23,19 +23,19 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.TodoRe
 fun AppNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = "list",
+        startDestination = NavigationItem.List.route,
     ) {
-        composable("list") {
+        composable(NavigationItem.List.route) {
             val viewModel: TodoListViewModel = hiltViewModel()
             val state by viewModel.uiState.collectAsState()
             TodoListScreen(
                 state,
                 viewModel::onEvent,
-                navigateToTodoRegisterScreen = { navController.navigate("register") },
-                navigateToTodoEditScreen = { todoId -> navController.navigate("edit/$todoId") }
+                navigateToTodoRegisterScreen = { navController.navigate(NavigationItem.Register.route) },
+                navigateToTodoEditScreen = { todoId -> navController.navigate(NavigationItem.Edit.route + "/$todoId") }
             )
         }
-        composable("register") {
+        composable(NavigationItem.Register.route) {
             val viewModel: TodoRegisterViewModel = hiltViewModel()
             val state by viewModel.uiState.collectAsState()
             TodoRegisterScreen(
@@ -46,8 +46,8 @@ fun AppNavHost(navController: NavHostController) {
             )
         }
         composable(
-            "edit/{todoId}",
-            arguments = listOf(navArgument("todoId") { type = NavType.IntType })
+            NavigationItem.Edit.route + "/{todoId}",
+            arguments = listOf(navArgument("todoId") { type = NavType.IntType }),
         ) {
             val viewModel: TodoEditViewModel = hiltViewModel()
             val state by viewModel.uiState.collectAsState()
