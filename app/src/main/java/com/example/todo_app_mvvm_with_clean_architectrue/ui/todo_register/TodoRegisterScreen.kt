@@ -8,12 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -22,17 +17,15 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.common.ObserveAsEvent
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.components.TodoRegisterAppBar
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -113,38 +106,4 @@ fun TodoRegisterScreen(
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TodoRegisterAppBar(
-    backToTodoListScreen: () -> Unit,
-    onEvent: (TodoRegisterEvent) -> Unit,
-) {
-    TopAppBar(
-        title = { Text("Todo登録", color = Color.White) },
-        navigationIcon = {
-            IconButton(
-                onClick = { backToTodoListScreen() }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back Arrow",
-                    tint = Color.White
-                )
-            }
-        },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
-        actions = {
-            IconButton(
-                onClick = { onEvent(TodoRegisterEvent.OnRegisterButtonTapped) }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = "Check",
-                    tint = Color.White
-                )
-            }
-        }
-    )
 }
