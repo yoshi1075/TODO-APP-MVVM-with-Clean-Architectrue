@@ -1,7 +1,13 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit
 
-sealed interface TodoEditOneTimeEvent {
-    object Nothing : TodoEditOneTimeEvent
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+sealed interface TodoEditOneTimeEvent : Parcelable {
+    @Parcelize
+    data object Nothing : TodoEditOneTimeEvent
+    @Parcelize
     data class ShowSnackbar(val message: String) : TodoEditOneTimeEvent
-    object NavigateToListScreen : TodoEditOneTimeEvent
+    @Parcelize
+    data object NavigateToListScreen : TodoEditOneTimeEvent
 }
