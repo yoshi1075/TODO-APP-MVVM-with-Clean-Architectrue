@@ -55,7 +55,6 @@ fun AppNavHost(navController: NavHostController) {
                 state,
                 viewModel::onEvent,
                 backToTodoListScreen = { navController.popBackStack() },
-                todoId = it.arguments?.getInt("todoId") ?: 0
             )
         }
     }

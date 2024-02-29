@@ -1,5 +1,6 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoEditViewModel @Inject constructor(
-    private val todoRepository: TodoRepository
+    private val savedStateHandle: SavedStateHandle,
+    private val todoRepository: TodoRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(TodoEditUiState())
     val uiState = _uiState.asStateFlow()
@@ -21,7 +23,8 @@ class TodoEditViewModel @Inject constructor(
         when (event) {
             is TodoEditEvent.OnLaunched -> {
                 viewModelScope.launch {
-                    todoRepository.getTodo(event.todoId).let { todo ->
+                    val todoId = checkNotNull(savedStateHandle.get<Int>("todoId"))
+                    todoRepository.getTodo(todoId).let { todo ->
                         _uiState.update {
                             uiState.value.copy(todo = todo, title = todo.title, detail = todo.detail)
                         }

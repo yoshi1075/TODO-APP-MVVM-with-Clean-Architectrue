@@ -1,7 +1,7 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit
 
 sealed interface TodoEditEvent {
-    data class OnLaunched(val todoId: Int) : TodoEditEvent
+    object OnLaunched: TodoEditEvent
     data class OnTitleUpdated(val title: String) : TodoEditEvent
     data class OnDetailUpdated(val detail: String) : TodoEditEvent
     object OnDeleteIconTapped : TodoEditEvent
