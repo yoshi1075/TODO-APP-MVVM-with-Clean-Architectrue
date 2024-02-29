@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list
 
 import androidx.compose.foundation.layout.Box
@@ -14,12 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwithCleanArchitectrueTheme
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.AddingTodoFloatingButton
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.TodoListAppBar
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.TodoListItem
 
-@ExperimentalMaterial3Api
 @Composable
 fun TodoListScreen(
     state: TodoListUiState,
@@ -60,5 +64,21 @@ fun TodoListScreen(
                 )
             }
         }
+    }
+}
+
+@PreviewScreenSizes
+@Preview(
+    showSystemUi = true,
+)
+@Composable
+fun TodoListScreenPreview() {
+    TODOAPPMVVMwithCleanArchitectrueTheme {
+        TodoListScreen(
+            state = TodoListUiState(),
+            onEvent = {},
+            navigateToTodoRegisterScreen = {},
+            navigateToTodoEditScreen = {},
+        )
     }
 }
