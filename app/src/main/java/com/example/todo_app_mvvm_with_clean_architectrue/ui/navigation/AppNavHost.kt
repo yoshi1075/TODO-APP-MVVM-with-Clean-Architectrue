@@ -1,10 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.navigation
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -13,6 +9,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.extensions.sharedViewModel
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedViewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.TodoEditScreen
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.TodoEditViewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.TodoListScreen
@@ -26,9 +24,14 @@ fun AppNavHost(navController: NavHostController) {
         navController = navController,
         startDestination = NavigationItem.List.route,
     ) {
-        composable(NavigationItem.List.route) {
+        composable(NavigationItem.List.route) { backStackEntry ->
+
+            // FixMe: sharedViewModelを使用し、アプリ全体の表示/動作を制御する
+            val sharedViewModel = backStackEntry.sharedViewModel<SharedViewModel>(navController = navController)
+            val sharedState by sharedViewModel.sharedState.collectAsStateWithLifecycle()
+
             val viewModel: TodoListViewModel = hiltViewModel()
-            val state by viewModel.uiState.collectAsState()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
             TodoListScreen(
                 state,
                 viewModel::onEvent,
@@ -36,7 +39,12 @@ fun AppNavHost(navController: NavHostController) {
                 navigateToTodoEditScreen = { todoId -> navController.navigate(NavigationItem.Edit.route + "/$todoId") }
             )
         }
-        composable(NavigationItem.Register.route) {
+        composable(NavigationItem.Register.route) { backStackEntry ->
+
+            // FixMe: sharedViewModelを使用し、アプリ全体の表示/動作を制御する
+            val sharedViewModel = backStackEntry.sharedViewModel<SharedViewModel>(navController = navController)
+            val sharedState by sharedViewModel.sharedState.collectAsStateWithLifecycle()
+
             val viewModel: TodoRegisterViewModel = hiltViewModel()
             val state by viewModel.uiState.collectAsStateWithLifecycle()
             TodoRegisterScreen(
@@ -49,9 +57,14 @@ fun AppNavHost(navController: NavHostController) {
         composable(
             NavigationItem.Edit.route + "/{todoId}",
             arguments = listOf(navArgument("todoId") { type = NavType.IntType }),
-        ) {
+        ) { backStackEntry ->
+
+            // FixMe: sharedViewModelを使用し、アプリ全体の表示/動作を制御する
+            val sharedViewModel = backStackEntry.sharedViewModel<SharedViewModel>(navController = navController)
+            val sharedState by sharedViewModel.sharedState.collectAsStateWithLifecycle()
+
             val viewModel: TodoEditViewModel = hiltViewModel()
-            val state by viewModel.uiState.collectAsState()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
             TodoEditScreen(
                 state,
                 viewModel::onEvent,
