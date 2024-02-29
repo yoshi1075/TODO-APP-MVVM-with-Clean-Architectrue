@@ -1,9 +1,11 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
 import com.example.todo_app_mvvm_with_clean_architectrue.data.TodoRepository
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.extensions.saveableMutableStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,9 +17,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoRegisterViewModel @Inject constructor(
-    private val todoRepository: TodoRepository
+    private val todoRepository: TodoRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(TodoRegisterUiState())
+    private val _uiState by savedStateHandle.saveableMutableStateFlow {
+        MutableStateFlow(TodoRegisterUiState())
+    }
     val uiState = _uiState.asStateFlow()
 
     private val _oneTimeEvent = Channel<TodoRegisterOneTimeEvent>()

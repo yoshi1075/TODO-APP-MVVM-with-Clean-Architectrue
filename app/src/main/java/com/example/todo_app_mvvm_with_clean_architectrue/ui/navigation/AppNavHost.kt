@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -37,7 +38,7 @@ fun AppNavHost(navController: NavHostController) {
         }
         composable(NavigationItem.Register.route) {
             val viewModel: TodoRegisterViewModel = hiltViewModel()
-            val state by viewModel.uiState.collectAsState()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
             TodoRegisterScreen(
                 state,
                 viewModel.oneTimeEvent,
