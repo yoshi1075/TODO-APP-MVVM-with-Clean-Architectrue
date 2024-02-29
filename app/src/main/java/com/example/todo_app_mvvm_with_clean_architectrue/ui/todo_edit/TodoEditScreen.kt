@@ -32,13 +32,12 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.components
 fun TodoEditScreen(
     state: TodoEditUiState,
     onEvent: (TodoEditEvent) -> Unit,
-    todoId: Int,
     backToTodoListScreen: () -> Unit,
 ) {
     val hostState = SnackbarHostState()
 
     LaunchedEffect(Unit) {
-        onEvent(TodoEditEvent.OnLaunched(todoId))
+        onEvent(TodoEditEvent.OnLaunched)
     }
 
     LaunchedEffect(state.oneTimeEvent) {
