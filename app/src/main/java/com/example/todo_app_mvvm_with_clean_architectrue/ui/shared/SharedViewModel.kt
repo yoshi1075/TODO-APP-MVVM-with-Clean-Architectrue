@@ -20,7 +20,7 @@ class SharedViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : 
         // TODO: impl
         when (event) {
             is SharedEvent.OnScreenLaunched -> {
-                _sharedState.update { sharedState.value.copy(title = event.navigationItem.route)  }
+                _sharedState.update { sharedState.value.copy(title = event.screen.route)  }
             }
         }
     }
