@@ -1,8 +1,8 @@
 package com.example.todo_app_mvvm_with_clean_architectrue.data
 
 import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import kotlin.random.Random
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Todo(

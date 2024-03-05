@@ -4,6 +4,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class SharedState(
-    val title: String = "",
-) : Parcelable
+data class SharedState(val title: String = "") : Parcelable

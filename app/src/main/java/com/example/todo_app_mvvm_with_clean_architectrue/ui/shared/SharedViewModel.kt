@@ -4,10 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.extensions.saveableMutableStateFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -20,7 +20,7 @@ class SharedViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : 
         // TODO: impl
         when (event) {
             is SharedEvent.OnScreenLaunched -> {
-                _sharedState.update { sharedState.value.copy(title = event.screen.route)  }
+                _sharedState.update { sharedState.value.copy(title = event.screen.route) }
             }
         }
     }

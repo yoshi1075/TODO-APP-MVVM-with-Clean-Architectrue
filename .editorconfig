@@ -1,0 +1,39 @@
+# https://editorconfig.org
+root = true
+
+[*]
+end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{kt,kts}]
+ktlint_code_style = ktlint_official
+ktlint_standard = enabled
+ktlint_experimental = enabled
+
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ij_kotlin_imports_layout = *
+ij_kotlin_line_break_after_multiline_when_entry = true
+ij_kotlin_packages_to_use_import_on_demand = java.util.*,kotlinx.android.synthetic.**
+indent_size = 4
+indent_style = space
+ktlint_argument_list_wrapping_ignore_when_parameter_count_greater_or_equal_than = 8
+ktlint_code_style = android_studio
+ktlint_ignore_back_ticked_identifier = false
+max_line_length = 120
+
+ktlint_standard_package-name = disabled
+ktlint_function_naming_ignore_when_annotated_with = Composable
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_function-expression-body = disabled
+
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = unset
+
+[gradle/verification-metadata.xml]
+indent_size = 3
+
+[*.yml]
+ij_yaml_spaces_within_brackets = false

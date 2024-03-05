@@ -8,6 +8,6 @@ import androidx.room.RoomDatabase
     version = 1,
     exportSchema = false,
 )
-abstract class TodoDatabase: RoomDatabase() {
+abstract class TodoDatabase : RoomDatabase() {
     abstract val dao: TodoDao
 }

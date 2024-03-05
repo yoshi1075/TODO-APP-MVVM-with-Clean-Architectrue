@@ -20,7 +20,8 @@ class AppModule {
     fun provideTodoDatabase(app: Application): TodoDatabase {
         return Room.databaseBuilder(
             app,
-            TodoDatabase::class.java, "todo-database"
+            TodoDatabase::class.java,
+            "todo-database",
         ).build()
     }
 

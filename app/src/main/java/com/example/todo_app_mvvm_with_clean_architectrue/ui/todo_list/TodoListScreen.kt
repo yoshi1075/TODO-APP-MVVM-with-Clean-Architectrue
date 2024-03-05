@@ -40,13 +40,13 @@ fun TodoListScreen(
         floatingActionButton = { AddingTodoFloatingButton(navigateToTodoRegisterScreen) },
     ) {
         LazyColumn(
-            modifier = Modifier.padding(it)
+            modifier = Modifier.padding(it),
         ) {
             items(state.todos) { todo ->
                 TodoListItem(
                     todo = todo,
                     navigateToTodoEditScreen = navigateToTodoEditScreen,
-                    onEvent = onEvent
+                    onEvent = onEvent,
                 )
                 Divider(thickness = 1.dp)
             }
@@ -54,9 +54,9 @@ fun TodoListScreen(
 
         if (state.showsLoadingDialog) {
             Box(
-                contentAlignment= Alignment.Center,
+                contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxSize(),
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(100.dp),

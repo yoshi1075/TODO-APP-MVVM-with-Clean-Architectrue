@@ -16,15 +16,12 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.TodoEditEv
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoEditAppBar(
-    backToTodoListScreen: () -> Unit,
-    onEvent: (TodoEditEvent) -> Unit,
-) {
+fun TodoEditAppBar(backToTodoListScreen: () -> Unit, onEvent: (TodoEditEvent) -> Unit) {
     TopAppBar(
         title = { Text("Todo編集", color = Color.White) },
         navigationIcon = {
             IconButton(
-                onClick = { backToTodoListScreen() }
+                onClick = { backToTodoListScreen() },
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -36,7 +33,7 @@ fun TodoEditAppBar(
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
         actions = {
             IconButton(
-                onClick = { onEvent(TodoEditEvent.OnDeleteIconTapped) }
+                onClick = { onEvent(TodoEditEvent.OnDeleteIconTapped) },
             ) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
@@ -47,7 +44,7 @@ fun TodoEditAppBar(
             IconButton(
                 onClick = {
                     onEvent(TodoEditEvent.OnCompleteIconTapped)
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
@@ -55,6 +52,6 @@ fun TodoEditAppBar(
                     tint = Color.White,
                 )
             }
-        }
+        },
     )
 }

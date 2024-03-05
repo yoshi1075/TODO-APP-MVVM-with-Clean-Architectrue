@@ -1,8 +1,7 @@
 package com.example.todo_app_mvvm_with_clean_architectrue
 
-import org.junit.Test
-
 import org.junit.Assert.*
+import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).

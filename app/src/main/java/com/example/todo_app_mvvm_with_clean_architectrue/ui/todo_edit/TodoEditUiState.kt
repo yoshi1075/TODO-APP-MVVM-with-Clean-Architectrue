@@ -10,5 +10,5 @@ data class TodoEditUiState(
     val title: String = "",
     val detail: String = "",
     val showsDialog: Boolean = false,
-    val oneTimeEvent: TodoEditOneTimeEvent = TodoEditOneTimeEvent.Nothing
+    val oneTimeEvent: TodoEditOneTimeEvent = TodoEditOneTimeEvent.Nothing,
 ) : Parcelable

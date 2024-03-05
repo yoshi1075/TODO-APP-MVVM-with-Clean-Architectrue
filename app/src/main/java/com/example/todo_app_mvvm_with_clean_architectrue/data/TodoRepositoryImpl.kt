@@ -2,14 +2,12 @@ package com.example.todo_app_mvvm_with_clean_architectrue.data
 
 import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoDao
 import com.example.todo_app_mvvm_with_clean_architectrue.database.TodoEntity
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class TodoRepositoryImpl @Inject constructor(
-    private val dao: TodoDao
-) : TodoRepository {
+class TodoRepositoryImpl @Inject constructor(private val dao: TodoDao) : TodoRepository {
     override suspend fun getTodos(): Flow<List<Todo>> {
         delay(1000L)
         return dao.getTodos().map { it.map { it.toTodo() } }

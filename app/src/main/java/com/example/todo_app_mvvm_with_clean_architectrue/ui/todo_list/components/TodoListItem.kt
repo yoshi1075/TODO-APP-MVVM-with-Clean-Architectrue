@@ -14,28 +14,24 @@ import com.example.todo_app_mvvm_with_clean_architectrue.data.Todo
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.TodoListEvent
 
 @Composable
-fun TodoListItem(
-    todo: Todo,
-    navigateToTodoEditScreen: (Int) -> Unit,
-    onEvent: (TodoListEvent) -> Unit,
-) {
+fun TodoListItem(todo: Todo, navigateToTodoEditScreen: (Int) -> Unit, onEvent: (TodoListEvent) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clickable { navigateToTodoEditScreen(todo.id) }
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Checkbox(
             checked = todo.isDone,
             onCheckedChange = {
                 onEvent(TodoListEvent.OnChangedTodoChecked(todo, it))
-            }
+            },
         )
         Text(
             todo.title,
             fontSize = 16.sp,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

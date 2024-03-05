@@ -4,7 +4,4 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TodoRegisterUiState(
-    val title: String = "",
-    val detail: String = "",
-) : Parcelable
+data class TodoRegisterUiState(val title: String = "", val detail: String = "") : Parcelable
