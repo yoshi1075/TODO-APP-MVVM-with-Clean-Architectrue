@@ -12,9 +12,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -23,12 +20,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedEvent
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedState
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.components.TodoEditAppBar
 
 @Composable
-fun TodoEditScreen(state: TodoEditUiState, onEvent: (TodoEditEvent) -> Unit, backToTodoListScreen: () -> Unit) {
-    val hostState = SnackbarHostState()
-
+fun TodoEditScreen(
+    sharedState: SharedState,
+    onSharedEvent: (SharedEvent) -> Unit,
+    state: TodoEditUiState,
+    onEvent: (TodoEditEvent) -> Unit,
+    backToTodoListScreen: () -> Unit,
+) {
     LaunchedEffect(Unit) {
         onEvent(TodoEditEvent.OnLaunched)
     }
@@ -41,12 +44,9 @@ fun TodoEditScreen(state: TodoEditUiState, onEvent: (TodoEditEvent) -> Unit, bac
             }
 
             is TodoEditOneTimeEvent.ShowSnackbar -> {
-                hostState.showSnackbar(
-                    message = event.message,
-                    duration = SnackbarDuration.Short,
-                    withDismissAction = true,
-                )
+                onSharedEvent(SharedEvent.ShowSnackbar(event.message))
                 onEvent(TodoEditEvent.OnEventConsumed)
+                backToTodoListScreen()
             }
 
             TodoEditOneTimeEvent.Nothing -> {}
@@ -60,7 +60,6 @@ fun TodoEditScreen(state: TodoEditUiState, onEvent: (TodoEditEvent) -> Unit, bac
                 onEvent,
             )
         },
-        snackbarHost = { SnackbarHost(hostState) },
     ) {
         if (state.showsDialog) {
             AlertDialog(
