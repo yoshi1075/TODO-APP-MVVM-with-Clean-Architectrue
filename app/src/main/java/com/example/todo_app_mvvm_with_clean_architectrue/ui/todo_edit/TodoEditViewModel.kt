@@ -65,6 +65,7 @@ class TodoEditViewModel @Inject constructor(
                             showsDialog = false,
                             oneTimeEvent = TodoEditOneTimeEvent.ShowSnackbar("Todoを削除しました"),
                         )
+                        uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.NavigateToListScreen)
                     }
                 }
             }
@@ -84,13 +85,8 @@ class TodoEditViewModel @Inject constructor(
                     todoRepository.updateTodo(newTodo)
                     _uiState.update {
                         uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.ShowSnackbar("更新に成功しました"))
+                        uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.NavigateToListScreen)
                     }
-                }
-            }
-
-            TodoEditEvent.OnSnackbarDismissed -> {
-                _uiState.update {
-                    uiState.value.copy(oneTimeEvent = TodoEditOneTimeEvent.NavigateToListScreen)
                 }
             }
 
