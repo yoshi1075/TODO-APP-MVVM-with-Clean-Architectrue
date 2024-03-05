@@ -11,6 +11,7 @@ junit = "4.13.2"
 lifecycle = "2.7.0"
 navigation-compose = "2.7.7"
 room = "2.6.1"
+ktlint = "1.2.1"
 
 android-gradle-plugin = "8.1.0"
 kotlin = "1.9.22"
@@ -46,6 +47,8 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android-compiler" }
 junit = { module = "junit:junit", version.ref = "junit" }
+
+pinterest-ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 
 [bundles]
 lifecycle = ["androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-compose"]
