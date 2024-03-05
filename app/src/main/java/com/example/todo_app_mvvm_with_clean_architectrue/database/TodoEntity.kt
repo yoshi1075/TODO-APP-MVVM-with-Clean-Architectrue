@@ -10,7 +10,7 @@ data class TodoEntity(
     @ColumnInfo(name = "todo_id") @PrimaryKey val todoId: Int,
     val title: String,
     val detail: String,
-    @ColumnInfo(name = "is_done") val isDone: Boolean
+    @ColumnInfo(name = "is_done") val isDone: Boolean,
 ) {
     fun toTodo(): Todo {
         return Todo(id = todoId, title = title, detail = detail, isDone = isDone)

@@ -6,11 +6,13 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.properties.PropertyDelegateProvider
 import kotlin.properties.ReadOnlyProperty
+import kotlinx.coroutines.flow.MutableStateFlow
 
-fun <T : Any> SavedStateHandle.saveableMutableStateFlow(init: () -> MutableStateFlow<T>): PropertyDelegateProvider<Any?, ReadOnlyProperty<Any?, MutableStateFlow<T>>> {
+fun <T : Any> SavedStateHandle.saveableMutableStateFlow(
+    init: () -> MutableStateFlow<T>,
+): PropertyDelegateProvider<Any?, ReadOnlyProperty<Any?, MutableStateFlow<T>>> {
     return saveable(
         saver = Saver(
             save = {
@@ -18,7 +20,8 @@ fun <T : Any> SavedStateHandle.saveableMutableStateFlow(init: () -> MutableState
             },
             restore = {
                 MutableStateFlow(it)
-            }),
-        init = init
+            },
+        ),
+        init = init,
     )
 }

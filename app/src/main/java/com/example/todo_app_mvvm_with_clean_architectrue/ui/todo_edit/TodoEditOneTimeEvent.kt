@@ -6,8 +6,10 @@ import kotlinx.parcelize.Parcelize
 sealed interface TodoEditOneTimeEvent : Parcelable {
     @Parcelize
     data object Nothing : TodoEditOneTimeEvent
+
     @Parcelize
     data class ShowSnackbar(val message: String) : TodoEditOneTimeEvent
+
     @Parcelize
     data object NavigateToListScreen : TodoEditOneTimeEvent
 }

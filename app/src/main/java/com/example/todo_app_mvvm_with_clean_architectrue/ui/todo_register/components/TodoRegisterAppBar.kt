@@ -15,34 +15,31 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.TodoRe
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoRegisterAppBar(
-    backToTodoListScreen: () -> Unit,
-    onEvent: (TodoRegisterEvent) -> Unit,
-) {
+fun TodoRegisterAppBar(backToTodoListScreen: () -> Unit, onEvent: (TodoRegisterEvent) -> Unit) {
     TopAppBar(
         title = { Text("Todo登録", color = Color.White) },
         navigationIcon = {
             IconButton(
-                onClick = { backToTodoListScreen() }
+                onClick = { backToTodoListScreen() },
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Back Arrow",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
         actions = {
             IconButton(
-                onClick = { onEvent(TodoRegisterEvent.OnRegisterButtonTapped) }
+                onClick = { onEvent(TodoRegisterEvent.OnRegisterButtonTapped) },
             ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
                     contentDescription = "Check",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
-        }
+        },
     )
 }

@@ -10,7 +10,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun AddingTodoFloatingButton(navigateToTodoRegisterScreen: () -> Unit) {
     FloatingActionButton(
-        onClick = { navigateToTodoRegisterScreen() }) {
+        onClick = { navigateToTodoRegisterScreen() },
+    ) {
         Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
     }
 }

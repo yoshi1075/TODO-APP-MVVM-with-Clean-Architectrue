@@ -35,7 +35,7 @@ fun TodoRegisterScreen(
     uiState: TodoRegisterUiState,
     oneTimeEvent: Flow<TodoRegisterOneTimeEvent>,
     onEvent: (TodoRegisterEvent) -> Unit,
-    backToTodoListScreen: () -> Unit
+    backToTodoListScreen: () -> Unit,
 ) {
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -45,6 +45,7 @@ fun TodoRegisterScreen(
             TodoRegisterOneTimeEvent.NavigateToListScreen -> {
                 backToTodoListScreen()
             }
+
             is TodoRegisterOneTimeEvent.ShowSnackbar -> {
                 scope.launch {
                     val result = hostState.showSnackbar(
@@ -54,7 +55,8 @@ fun TodoRegisterScreen(
                     )
                     when (result) {
                         SnackbarResult.Dismissed,
-                        SnackbarResult.ActionPerformed -> {
+                        SnackbarResult.ActionPerformed,
+                        -> {
                             onEvent(TodoRegisterEvent.BackTodoListScreen)
                         }
                     }
@@ -80,7 +82,7 @@ fun TodoRegisterScreen(
                 fontSize = 16.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
             )
             TextField(
                 value = uiState.title,

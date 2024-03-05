@@ -36,7 +36,7 @@ fun AppNavHost(navController: NavHostController) {
                 state,
                 viewModel::onEvent,
                 navigateToTodoRegisterScreen = { navController.navigate(Screen.Register.route) },
-                navigateToTodoEditScreen = { todoId -> navController.navigate(Screen.Edit.route + "/$todoId") }
+                navigateToTodoEditScreen = { todoId -> navController.navigate(Screen.Edit.route + "/$todoId") },
             )
         }
         composable(Screen.Register.route) { backStackEntry ->
@@ -51,7 +51,7 @@ fun AppNavHost(navController: NavHostController) {
                 state,
                 viewModel.oneTimeEvent,
                 viewModel::onEvent,
-                backToTodoListScreen = { navController.popBackStack() }
+                backToTodoListScreen = { navController.popBackStack() },
             )
         }
         composable(

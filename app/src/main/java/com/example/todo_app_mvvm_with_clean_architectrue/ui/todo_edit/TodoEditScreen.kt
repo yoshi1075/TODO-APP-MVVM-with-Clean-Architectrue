@@ -10,7 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -27,13 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.components.TodoEditAppBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoEditScreen(
-    state: TodoEditUiState,
-    onEvent: (TodoEditEvent) -> Unit,
-    backToTodoListScreen: () -> Unit,
-) {
+fun TodoEditScreen(state: TodoEditUiState, onEvent: (TodoEditEvent) -> Unit, backToTodoListScreen: () -> Unit) {
     val hostState = SnackbarHostState()
 
     LaunchedEffect(Unit) {
@@ -46,6 +40,7 @@ fun TodoEditScreen(
                 backToTodoListScreen()
                 onEvent(TodoEditEvent.OnEventConsumed)
             }
+
             is TodoEditOneTimeEvent.ShowSnackbar -> {
                 val result = hostState.showSnackbar(
                     message = event.message,
@@ -54,12 +49,14 @@ fun TodoEditScreen(
                 )
                 when (result) {
                     SnackbarResult.Dismissed,
-                    SnackbarResult.ActionPerformed -> {
+                    SnackbarResult.ActionPerformed,
+                    -> {
                         onEvent(TodoEditEvent.OnSnackbarDismissed)
                     }
                 }
                 onEvent(TodoEditEvent.OnEventConsumed)
             }
+
             TodoEditOneTimeEvent.Nothing -> {}
         }
     }
@@ -71,7 +68,7 @@ fun TodoEditScreen(
                 onEvent,
             )
         },
-        snackbarHost = { SnackbarHost(hostState) }
+        snackbarHost = { SnackbarHost(hostState) },
     ) {
         if (state.showsDialog) {
             AlertDialog(
@@ -81,14 +78,14 @@ fun TodoEditScreen(
                         onClick = {
                             // TODO: 削除処理
                             onEvent(TodoEditEvent.OnDeleteConfirmed)
-                        }
+                        },
                     ) {
                         Text("削除")
                     }
                 },
                 dismissButton = {
                     Button(
-                        onClick = { onEvent(TodoEditEvent.OnDialogDismissRequested) }
+                        onClick = { onEvent(TodoEditEvent.OnDialogDismissRequested) },
                     ) {
                         Text("キャンセル")
                     }
@@ -111,7 +108,7 @@ fun TodoEditScreen(
                 fontSize = 16.sp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp)
+                    .padding(top = 8.dp),
             )
             TextField(
                 value = state.title,

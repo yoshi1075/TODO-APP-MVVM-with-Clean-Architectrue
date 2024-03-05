@@ -12,6 +12,6 @@ import androidx.compose.ui.graphics.Color
 fun TodoListAppBar() {
     TopAppBar(
         title = { Text(text = "Todo一覧", color = Color.White) },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue)
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Blue),
     )
 }
