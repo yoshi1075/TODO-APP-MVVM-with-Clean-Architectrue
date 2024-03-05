@@ -50,6 +50,7 @@ class TodoRegisterViewModel @Inject constructor(
                     )
                     todoRepository.registerTodo(todo)
                     _oneTimeEvent.send(TodoRegisterOneTimeEvent.ShowSnackbar("Success"))
+                    _oneTimeEvent.send(TodoRegisterOneTimeEvent.NavigateToListScreen)
                 }
             }
 

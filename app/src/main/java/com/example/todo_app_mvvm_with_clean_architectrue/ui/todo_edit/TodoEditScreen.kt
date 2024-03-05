@@ -15,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -42,18 +41,11 @@ fun TodoEditScreen(state: TodoEditUiState, onEvent: (TodoEditEvent) -> Unit, bac
             }
 
             is TodoEditOneTimeEvent.ShowSnackbar -> {
-                val result = hostState.showSnackbar(
+                hostState.showSnackbar(
                     message = event.message,
                     duration = SnackbarDuration.Short,
                     withDismissAction = true,
                 )
-                when (result) {
-                    SnackbarResult.Dismissed,
-                    SnackbarResult.ActionPerformed,
-                    -> {
-                        onEvent(TodoEditEvent.OnSnackbarDismissed)
-                    }
-                }
                 onEvent(TodoEditEvent.OnEventConsumed)
             }
 
