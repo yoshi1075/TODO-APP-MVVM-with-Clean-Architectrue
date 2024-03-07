@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedEvent
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedState
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwithCleanArchitectrueTheme
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.AddingTodoFloatingButton
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.TodoListAppBar
@@ -26,6 +28,8 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components
 
 @Composable
 fun TodoListScreen(
+    sharedState: SharedState,
+    onSharedEvent: (SharedEvent) -> Unit,
     state: TodoListUiState,
     onEvent: (TodoListEvent) -> Unit,
     navigateToTodoRegisterScreen: () -> Unit,
@@ -75,6 +79,8 @@ fun TodoListScreen(
 fun TodoListScreenPreview() {
     TODOAPPMVVMwithCleanArchitectrueTheme {
         TodoListScreen(
+            SharedState(),
+            {},
             state = TodoListUiState(),
             onEvent = {},
             navigateToTodoRegisterScreen = {},
