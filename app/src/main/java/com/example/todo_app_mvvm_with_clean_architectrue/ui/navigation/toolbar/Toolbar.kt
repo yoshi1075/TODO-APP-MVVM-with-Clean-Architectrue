@@ -14,7 +14,7 @@ sealed interface Toolbar {
     val actions: @Composable RowScope.() -> Unit
 
     companion object {
-        fun findScreen(route: String?): Toolbar? {
+        fun findFrom(route: String?): Toolbar? {
             return Toolbar::class.sealedSubclasses.map { kClass ->
                 kClass.objectInstance as Toolbar
             }.find { screen ->
