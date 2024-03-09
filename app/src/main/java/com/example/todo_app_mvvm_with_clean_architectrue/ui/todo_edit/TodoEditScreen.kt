@@ -58,15 +58,16 @@ fun TodoEditScreen(
             TodoEditToolbar.Event.OnNavigationIconTapped -> {
                 backToTodoListScreen()
             }
+
             TodoEditToolbar.Event.OnDeleteIconIconTapped -> {
                 onEvent(TodoEditEvent.OnDeleteIconTapped)
             }
+
             TodoEditToolbar.Event.OnCompleteIconIconTapped -> {
                 onEvent(TodoEditEvent.OnCompleteIconTapped)
             }
         }
     }
-
 
     if (state.showsDialog) {
         AlertDialog(

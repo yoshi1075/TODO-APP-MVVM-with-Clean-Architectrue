@@ -14,10 +14,7 @@ import androidx.compose.ui.graphics.Color
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.AppBarState
 
 @Composable
-fun TodoTopAppBar(
-    appBarState: AppBarState,
-    modifier: Modifier = Modifier,
-) {
+fun TodoTopAppBar(appBarState: AppBarState, modifier: Modifier = Modifier) {
     TopAppBar(
         title = {
             val title = appBarState.title

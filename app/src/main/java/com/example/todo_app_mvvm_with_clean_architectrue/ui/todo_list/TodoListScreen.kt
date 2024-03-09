@@ -33,7 +33,7 @@ fun TodoListScreen(
     onEvent: (TodoListEvent) -> Unit,
     navigateToTodoRegisterScreen: () -> Unit,
     navigateToTodoEditScreen: (Int) -> Unit,
-)  {
+) {
     LaunchedEffect(Unit) {
         onEvent(TodoListEvent.OnLaunched)
     }

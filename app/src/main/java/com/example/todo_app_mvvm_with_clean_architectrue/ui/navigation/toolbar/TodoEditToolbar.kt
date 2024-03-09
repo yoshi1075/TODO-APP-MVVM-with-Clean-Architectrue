@@ -22,20 +22,20 @@ data object TodoEditToolbar : Toolbar {
         data object OnCompleteIconIconTapped : Event
     }
 
-    private val _Event = MutableSharedFlow<Event>(extraBufferCapacity = 1)
-    val event: Flow<Event> = _Event.asSharedFlow()
+    private val _event = MutableSharedFlow<Event>(extraBufferCapacity = 1)
+    val event: Flow<Event> = _event.asSharedFlow()
 
     override val route: String = NavigationItem.Edit().route
     override val isAppBarVisible: Boolean = true
     override val navigationIcon: ImageVector = Icons.Filled.ArrowBack
     override val navigationIconContentDescription: String = "Back Arrow"
     override val onNavigationIconClick: () -> Unit = {
-        _Event.tryEmit(Event.OnNavigationIconTapped)
+        _event.tryEmit(Event.OnNavigationIconTapped)
     }
     override val title: String = "Todo編集"
     override val actions: @Composable (RowScope.() -> Unit) = {
         IconButton(
-            onClick = { _Event.tryEmit(Event.OnDeleteIconIconTapped) },
+            onClick = { _event.tryEmit(Event.OnDeleteIconIconTapped) },
         ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
@@ -44,7 +44,7 @@ data object TodoEditToolbar : Toolbar {
             )
         }
         IconButton(
-            onClick = { _Event.tryEmit(Event.OnCompleteIconIconTapped) },
+            onClick = { _event.tryEmit(Event.OnCompleteIconIconTapped) },
         ) {
             Icon(
                 imageVector = Icons.Filled.Check,

@@ -20,20 +20,20 @@ data object TodoRegisterToolbar : Toolbar {
         data object OnRegisterButtonTapped : Event
     }
 
-    private val _Event = MutableSharedFlow<Event>(extraBufferCapacity = 1)
-    val event: Flow<Event> = _Event.asSharedFlow()
+    private val _event = MutableSharedFlow<Event>(extraBufferCapacity = 1)
+    val event: Flow<Event> = _event.asSharedFlow()
 
     override val route: String = NavigationItem.Register.route
     override val isAppBarVisible: Boolean = true
     override val navigationIcon: ImageVector = Icons.Filled.ArrowBack
     override val navigationIconContentDescription: String = "Back Arrow"
     override val onNavigationIconClick: () -> Unit = {
-        _Event.tryEmit(Event.OnNavigationIconTapped)
+        _event.tryEmit(Event.OnNavigationIconTapped)
     }
     override val title: String = "Todo登録"
     override val actions: @Composable (RowScope.() -> Unit) = {
         IconButton(
-            onClick = { _Event.tryEmit(Event.OnRegisterButtonTapped) },
+            onClick = { _event.tryEmit(Event.OnRegisterButtonTapped) },
         ) {
             Icon(
                 imageVector = Icons.Filled.Check,

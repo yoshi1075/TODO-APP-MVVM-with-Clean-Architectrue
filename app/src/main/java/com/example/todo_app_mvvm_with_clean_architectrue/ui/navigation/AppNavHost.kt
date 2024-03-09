@@ -40,9 +40,6 @@ fun AppNavHost(navController: NavHostController) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            val isVisible = appBarState.isVisible
-            val screen = appBarState.currentToolbar
-            val route = appBarState.currentScreenRoute
             if (appBarState.isVisible) {
                 TodoTopAppBar(appBarState = appBarState)
             }
@@ -79,7 +76,11 @@ fun AppNavHost(navController: NavHostController) {
                     state,
                     viewModel::onEvent,
                     navigateToTodoRegisterScreen = { navController.navigate(NavigationItem.Register.route) },
-                    navigateToTodoEditScreen = { todoId -> navController.navigate(NavigationItem.Edit().root + "/$todoId") },
+                    navigateToTodoEditScreen = { todoId ->
+                        navController.navigate(
+                            NavigationItem.Edit().root + "/$todoId",
+                        )
+                    },
                 )
             }
             composable(NavigationItem.Register.route) { backStackEntry ->

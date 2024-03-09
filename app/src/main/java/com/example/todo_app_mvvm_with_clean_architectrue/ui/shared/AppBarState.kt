@@ -7,9 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.navigation.toolbar.Toolbar
 
-class AppBarState(
-    private val navController: NavController,
-) {
+class AppBarState(private val navController: NavController) {
     val currentScreenRoute: String?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination?.route
 
