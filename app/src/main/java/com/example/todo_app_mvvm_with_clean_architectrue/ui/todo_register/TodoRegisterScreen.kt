@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -19,12 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.common.ObserveAsEvent
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.navigation.toolbar.TodoRegisterToolbar
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedEvent
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedState
-import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_register.components.TodoRegisterAppBar
 import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoRegisterScreen(
     sharedState: SharedState,
@@ -46,46 +43,53 @@ fun TodoRegisterScreen(
         }
     }
 
-    Scaffold(
-        topBar = { TodoRegisterAppBar(backToTodoListScreen, onEvent) },
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(it)
-                .padding(horizontal = 16.dp),
-        ) {
-            Text(
-                text = "タイトル",
-                fontSize = 16.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-            )
-            TextField(
-                value = uiState.title,
-                onValueChange = { onEvent(TodoRegisterEvent.OnTitleUpdated(it)) },
-                textStyle = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = "詳細",
-                fontSize = 16.sp,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            TextField(
-                value = uiState.detail,
-                onValueChange = { onEvent(TodoRegisterEvent.OnDetailUpdated(it)) },
-                textStyle = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(480.dp),
-            )
+    ObserveAsEvent(TodoRegisterToolbar.event) { event ->
+        when (event) {
+            TodoRegisterToolbar.Event.OnNavigationIconTapped -> {
+                backToTodoListScreen()
+            }
+
+            TodoRegisterToolbar.Event.OnRegisterButtonTapped -> {
+                onEvent(TodoRegisterEvent.OnRegisterButtonTapped)
+            }
         }
+    }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp),
+    ) {
+        Text(
+            text = "タイトル",
+            fontSize = 16.sp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+        )
+        TextField(
+            value = uiState.title,
+            onValueChange = { onEvent(TodoRegisterEvent.OnTitleUpdated(it)) },
+            textStyle = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = "詳細",
+            fontSize = 16.sp,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        TextField(
+            value = uiState.detail,
+            onValueChange = { onEvent(TodoRegisterEvent.OnDetailUpdated(it)) },
+            textStyle = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(480.dp),
+        )
     }
 }
