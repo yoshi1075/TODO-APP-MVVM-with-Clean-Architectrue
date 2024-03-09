@@ -23,7 +23,6 @@ import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedEvent
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedState
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.theme.TODOAPPMVVMwithCleanArchitectrueTheme
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.AddingTodoFloatingButton
-import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.TodoListAppBar
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_list.components.TodoListItem
 
 @Composable
@@ -34,13 +33,12 @@ fun TodoListScreen(
     onEvent: (TodoListEvent) -> Unit,
     navigateToTodoRegisterScreen: () -> Unit,
     navigateToTodoEditScreen: (Int) -> Unit,
-) {
+)  {
     LaunchedEffect(Unit) {
         onEvent(TodoListEvent.OnLaunched)
     }
 
     Scaffold(
-        topBar = { TodoListAppBar() },
         floatingActionButton = { AddingTodoFloatingButton(navigateToTodoRegisterScreen) },
     ) {
         LazyColumn(

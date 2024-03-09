@@ -89,6 +89,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose) // viewModelの取得
     ksp(libs.hilt.android.compiler)
 
+    // kotlin-reflect seald interfaceの洗い出しに使用
+    implementation(kotlin("reflect"))
+
     ktlint(libs.pinterest.ktlint) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))

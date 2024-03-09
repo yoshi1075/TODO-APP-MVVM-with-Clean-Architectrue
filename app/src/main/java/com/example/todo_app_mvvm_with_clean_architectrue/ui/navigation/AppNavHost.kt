@@ -18,7 +18,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.common.ObserveAsEvent
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.common.TodoTopAppBar
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.extensions.sharedViewModel
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.AppBarState
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedOneTimeEvent
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.shared.SharedViewModel
 import com.example.todo_app_mvvm_with_clean_architectrue.ui.todo_edit.TodoEditScreen
@@ -33,16 +35,25 @@ import kotlinx.coroutines.launch
 fun AppNavHost(navController: NavHostController) {
     val snackbarHostState = remember { SnackbarHostState() }
     val hostCoroutineScope = rememberCoroutineScope()
+    val appBarState = remember { AppBarState(navController) }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            val isVisible = appBarState.isVisible
+            val screen = appBarState.currentToolbar
+            val route = appBarState.currentScreenRoute
+            if (appBarState.isVisible) {
+                TodoTopAppBar(appBarState = appBarState)
+            }
+        },
     ) {
         NavHost(
             navController = navController,
-            startDestination = Screen.List.route,
+            startDestination = NavigationItem.List.route,
             modifier = Modifier.padding(it),
         ) {
-            composable(Screen.List.route) { backStackEntry ->
+            composable(NavigationItem.List.route) { backStackEntry ->
 
                 // FixMe: sharedViewModelを使用し、アプリ全体の表示/動作を制御する
                 val sharedViewModel = backStackEntry.sharedViewModel<SharedViewModel>(navController = navController)
@@ -67,11 +78,11 @@ fun AppNavHost(navController: NavHostController) {
                     sharedViewModel::onEvent,
                     state,
                     viewModel::onEvent,
-                    navigateToTodoRegisterScreen = { navController.navigate(Screen.Register.route) },
-                    navigateToTodoEditScreen = { todoId -> navController.navigate(Screen.Edit.route + "/$todoId") },
+                    navigateToTodoRegisterScreen = { navController.navigate(NavigationItem.Register.route) },
+                    navigateToTodoEditScreen = { todoId -> navController.navigate(NavigationItem.Edit.route + "/$todoId") },
                 )
             }
-            composable(Screen.Register.route) { backStackEntry ->
+            composable(NavigationItem.Register.route) { backStackEntry ->
 
                 // FixMe: sharedViewModelを使用し、アプリ全体の表示/動作を制御する
                 val sharedViewModel = backStackEntry.sharedViewModel<SharedViewModel>(navController = navController)
@@ -101,7 +112,7 @@ fun AppNavHost(navController: NavHostController) {
                 )
             }
             composable(
-                Screen.Edit.route + "/{todoId}",
+                NavigationItem.Edit.route + "/{todoId}",
                 arguments = listOf(navArgument("todoId") { type = NavType.IntType }),
             ) { backStackEntry ->
 
