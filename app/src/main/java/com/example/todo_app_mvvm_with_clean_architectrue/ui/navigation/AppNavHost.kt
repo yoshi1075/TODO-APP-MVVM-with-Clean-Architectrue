@@ -79,7 +79,7 @@ fun AppNavHost(navController: NavHostController) {
                     state,
                     viewModel::onEvent,
                     navigateToTodoRegisterScreen = { navController.navigate(NavigationItem.Register.route) },
-                    navigateToTodoEditScreen = { todoId -> navController.navigate(NavigationItem.Edit.route + "/$todoId") },
+                    navigateToTodoEditScreen = { todoId -> navController.navigate(NavigationItem.Edit().root + "/$todoId") },
                 )
             }
             composable(NavigationItem.Register.route) { backStackEntry ->
@@ -112,7 +112,7 @@ fun AppNavHost(navController: NavHostController) {
                 )
             }
             composable(
-                NavigationItem.Edit.route + "/{todoId}",
+                NavigationItem.Edit().route,
                 arguments = listOf(navArgument("todoId") { type = NavType.IntType }),
             ) { backStackEntry ->
 
