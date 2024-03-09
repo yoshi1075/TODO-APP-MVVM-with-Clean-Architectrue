@@ -1,0 +1,45 @@
+package com.example.todo_app_mvvm_with_clean_architectrue.ui.navigation.toolbar
+
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.todo_app_mvvm_with_clean_architectrue.ui.navigation.NavigationItem
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
+data object TodoRegisterToolbar : Toolbar {
+    sealed interface Event {
+        data object OnNavigationIconTapped : Event
+        data object OnRegisterButtonTapped : Event
+    }
+
+    private val _event = MutableSharedFlow<Event>(extraBufferCapacity = 1)
+    val event: Flow<Event> = _event.asSharedFlow()
+
+    override val route: String = NavigationItem.Register.route
+    override val isAppBarVisible: Boolean = true
+    override val navigationIcon: ImageVector = Icons.Filled.ArrowBack
+    override val navigationIconContentDescription: String = "Back Arrow"
+    override val onNavigationIconClick: () -> Unit = {
+        _event.tryEmit(Event.OnNavigationIconTapped)
+    }
+    override val title: String = "Todo登録"
+    override val actions: @Composable (RowScope.() -> Unit) = {
+        IconButton(
+            onClick = { _event.tryEmit(Event.OnRegisterButtonTapped) },
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Check,
+                contentDescription = "Check",
+                tint = Color.White,
+            )
+        }
+    }
+}
