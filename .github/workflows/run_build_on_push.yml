@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: check out
         uses: actions/checkout@v4
-        with: 
+        with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: set up jdk
